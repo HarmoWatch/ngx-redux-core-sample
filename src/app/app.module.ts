@@ -1,18 +1,23 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
 
-
-import { AppComponent } from './app.component';
-
+import {ReduxModule} from '@harmowatch/ngx-redux-core';
+import {AppComponent} from './app.component';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    ReduxModule.forRoot(),
+    RouterModule.forRoot([
+      {path: 'todo', loadChildren: './todo/todo.module#TodoModule'},
+      {path: '', redirectTo: 'todo', pathMatch: 'full'}
+    ])
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -1,0 +1,67 @@
+<div class="row">
+  <div class="col-12">
+    <button class="btn btn-primary" (click)="toggleListMode()">Toggle list mode</button>
+  </div>
+</div>
+<div class="row" [ngSwitch]="('list/mode' | reduxSelect | async)">
+  <div class="col-7" *ngSwitchCase="TodoListMode.DEBUG">
+    <div class="card">
+      <div class="card-header">
+        Redux State
+      </div>
+      <div class="card-block">
+        <blockquote class="card-blockquote">
+          <pre>{{ '' | reduxSelect | async | json }}</pre>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  <div class="col" *ngSwitchCase="TodoListMode.DEBUG">
+    <form (submit)="add(todo.value)">
+      <ul class="list-group">
+        <li class="list-group-item">
+          <input #todo type="text" class="form-control" placeholder="Enter a todo and press enter">
+        </li>
+        <li class="list-group-item justify-content-between" *ngFor="let todo of ('items' | reduxSelect | async)">
+          <span>{{todo.label}}</span>
+          <button type="button" class="close" (click)="remove(todo)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </li>
+      </ul>
+    </form>
+  </div>
+  <div class="col-12" *ngSwitchCase="TodoListMode.TABLE">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>UUID</th>
+        <th>Label</th>
+        <th>Creation date</th>
+        <th>&nbsp;</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let todo of ('items' | reduxSelect | async)">
+        <td>
+          <small>{{todo.uuid}}</small>
+        </td>
+        <td>{{todo.label}}</td>
+        <td>{{todo.creationDate | date:'medium'}}</td>
+        <td>
+          <button type="button" class="close" (click)="remove(todo)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <form (submit)="add(inlineTodo.value)">
+            <input #inlineTodo type="text" class="form-control" placeholder="Enter a todo and press enter">
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
